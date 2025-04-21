@@ -1,27 +1,31 @@
 let pyodide;
+let pyodideReady = false;
 
 async function loadPyodideAndBlack() {
-    console.log("Loading Pyodide...");
+    console.log("⏳ Loading Pyodide...");
 
     try {
-        pyodide = await loadPyodide();
-        console.log("Pyodide loaded. Installing Black...");
-        
+        pyodide = await loadPyodide({
+            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/"
+        });
+
+        console.log("📦 Pyodide loaded, installing Black...");
+
         await pyodide.loadPackage("micropip");
-        await pyodide.runPythonAsync(`
+        await pyodide.runPythonAsync(
             import micropip
             await micropip.install("black")
-        `);
+        );
 
+        pyodideReady = true;
         console.log("✅ Pyodide and Black are ready!");
-        alert("Python formatter is ready!");
     } catch (error) {
         console.error("❌ Failed to load Pyodide or install Black:", error);
-        alert("Failed to load Python formatter: " + error.message);
     }
 }
 
 loadPyodideAndBlack();
+
 
 // --- Main Code Formatter Logic ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -86,11 +90,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     throw new Error("Pyodide is still loading. Please wait a moment.");
                 }
 
-                const code = `
+                const code = 
 import black
 formatted = black.format_str(${JSON.stringify(inputCode)}, mode=black.Mode())
 formatted
-                `;
+                ;
                 const result = await pyodide.runPythonAsync(code);
                 formattedCode = result;
             } else if (codeType === "java") {
