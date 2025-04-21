@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Formatter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Code Formatter</h1>
+    </header>
+    <main>
+        <label for="codeType">Select Code Type:</label>
+        <select id="codeType">
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="javascript">JavaScript</option>
+            <option value="json">JSON</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+        </select>
+
+    <div class="code-editor">
+        <div class="line-numbers" id="lineNumbers"></div>
+        <textarea id="inputCode" placeholder="Paste your code here" oninput="updateLineNumbers()" onscroll="syncScroll()"></textarea>
+    </div>
+        
+        <button id="formatBtn">Format Code</button>
+
+        <h2>Formatted Code</h2>
+        <div class="code-editor">
+            <div class="line-numbers" id="outputLineNumbers"></div>
+            <textarea id="outputCode" readonly onscroll="syncScroll('outputCode', 'outputLineNumbers')"></textarea>
+        </div>            
+    </main>
+    <script src="language/standalone.js"></script>
+<script src="language/parser-html.js"></script>
+<script src="language/parser-postcss.js"></script>
+<script src="language/parser-babel.js"></script>
+<script src="language/parser-json"></script>
+<script src="language/parser-python"></script>
+<script src="language/parser-java"></script>
+<!-- Optional: Java parser if you want to attempt Java formatting later -->
+<!-- <script src="prettier/parser-java.js"></script> -->
+
+<!-- Load Pyodide (for Python) -->
+<script src="language/pyodide.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

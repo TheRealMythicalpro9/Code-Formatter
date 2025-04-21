@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@prettier/plugin-python": "github:prettier/plugin-python"
+  }
+}
