@@ -1,21 +1,27 @@
-// --- Load Pyodide + Black ---
-let pyodideReady = false;
 let pyodide;
 
 async function loadPyodideAndBlack() {
-    console.log("Loading Pyodide...")
-    pyodide = await loadPyodide();
-    await pyodide.loadPackage("micropip");
-    await pyodide.runPythonAsync(`
-        import micropip
-        await micropip.install("black")
-    `);
-    pyodideReady = true;
-    console.log("✅ Pyodide and Black are ready!");
-    alert("Python formatter is ready!");
+    console.log("Loading Pyodide...");
+
+    try {
+        pyodide = await loadPyodide();
+        console.log("Pyodide loaded. Installing Black...");
+        
+        await pyodide.loadPackage("micropip");
+        await pyodide.runPythonAsync(`
+            import micropip
+            await micropip.install("black")
+        `);
+
+        console.log("✅ Pyodide and Black are ready!");
+        alert("Python formatter is ready!");
+    } catch (error) {
+        console.error("❌ Failed to load Pyodide or install Black:", error);
+        alert("Failed to load Python formatter: " + error.message);
+    }
 }
 
-loadPyodideAndBlack(); // kick it off early
+loadPyodideAndBlack();
 
 // --- Main Code Formatter Logic ---
 document.addEventListener("DOMContentLoaded", () => {
