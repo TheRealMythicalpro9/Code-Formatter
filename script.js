@@ -12,10 +12,10 @@ async function loadPyodideAndBlack() {
         console.log("📦 Pyodide loaded, installing Black...");
 
         await pyodide.loadPackage("micropip");
-        await pyodide.runPythonAsync(
-            import micropip
-            await micropip.install("black")
-        );
+        await pyodide.runPythonAsync(`
+import micropip
+await micropip.install("black")
+        `);
 
         pyodideReady = true;
         console.log("✅ Pyodide and Black are ready!");
@@ -26,8 +26,6 @@ async function loadPyodideAndBlack() {
 
 loadPyodideAndBlack();
 
-
-// --- Main Code Formatter Logic ---
 document.addEventListener("DOMContentLoaded", () => {
     const codeTypeSelect = document.getElementById("codeType");
     const inputCodeTextarea = document.getElementById("inputCode");
@@ -90,13 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     throw new Error("Pyodide is still loading. Please wait a moment.");
                 }
 
-                const code = 
+                const code = `
 import black
 formatted = black.format_str(${JSON.stringify(inputCode)}, mode=black.Mode())
 formatted
-                ;
-                const result = await pyodide.runPythonAsync(code);
-                formattedCode = result;
+                `;
+                formattedCode = await pyodide.runPythonAsync(code);
             } else if (codeType === "java") {
                 formattedCode = prettier.format(inputCode, {
                     parser: "java",
@@ -116,7 +113,7 @@ formatted
     });
 });
 
-// --- Line Number Functions (unchanged) ---
+// --- Line Number Functions ---
 function updateLineNumbers(textareaId, lineNumbersId) {
     const textarea = document.getElementById(textareaId);
     const lineNumbers = document.getElementById(lineNumbersId);
